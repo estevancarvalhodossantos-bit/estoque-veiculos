@@ -1,0 +1,80 @@
+### Requisicoes de exemplo (extensao "REST Client" do VS Code ou HTTP Client do IntelliJ)
+### Execute na ordem: marca -> modelo -> veiculo
+
+@base = http://localhost:8080/api
+
+### 1. Criar marca
+POST {{base}}/marcas
+Content-Type: application/json
+
+{ "nome": "Fiat" }
+
+### 2. Listar marcas
+GET {{base}}/marcas
+
+### 3. Criar modelo (use o id da marca criada)
+POST {{base}}/modelos
+Content-Type: application/json
+
+{ "nome": "Argo", "marcaId": 1 }
+
+### 4. Listar modelos de uma marca
+GET {{base}}/modelos?marcaId=1
+
+### 5. Criar veiculo (use o id do modelo criado)
+POST {{base}}/veiculos
+Content-Type: application/json
+
+{
+  "modeloId": 1,
+  "anoFabricacao": 2022,
+  "cor": "Vermelho",
+  "preco": 78000.00,
+  "quilometragem": 15000,
+  "tipo": "CARRO",
+  "status": "DISPONIVEL"
+}
+
+### 6. Listar todos os veiculos
+GET {{base}}/veiculos
+
+### 7. Buscar por id
+GET {{base}}/veiculos/1
+
+### 8. Filtros
+GET {{base}}/veiculos?marca=fiat
+###
+GET {{base}}/veiculos?precoMin=50000&precoMax=100000
+###
+GET {{base}}/veiculos?anoMin=2021&status=DISPONIVEL
+###
+GET {{base}}/veiculos?tipo=SUV&marca=volks
+
+### 9. Atualizacao parcial (preco, quilometragem, status)
+PATCH {{base}}/veiculos/1
+Content-Type: application/json
+
+{ "preco": 75000.00, "quilometragem": 16000, "status": "RESERVADO" }
+
+### 10. Atualizacao completa
+PUT {{base}}/veiculos/1
+Content-Type: application/json
+
+{
+  "modeloId": 1,
+  "anoFabricacao": 2022,
+  "cor": "Preto",
+  "preco": 76000.00,
+  "quilometragem": 16000,
+  "tipo": "CARRO",
+  "status": "DISPONIVEL"
+}
+
+### 11. Remover veiculo (vendido ou descontinuado)
+DELETE {{base}}/veiculos/1
+
+### 12. Teste de validacao (deve retornar 400)
+POST {{base}}/veiculos
+Content-Type: application/json
+
+{ "modeloId": 1, "anoFabricacao": 1800, "cor": "", "preco": -5, "quilometragem": -1, "tipo": "CARRO", "status": "DISPONIVEL" }
